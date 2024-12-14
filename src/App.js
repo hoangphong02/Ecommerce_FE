@@ -68,6 +68,9 @@ function App() {
       })
     );
   };
+  useEffect(() => {
+    handleGetDetailsUser(user?.id, user?.access_token);
+  }, [handleGetDetailsUser, user?.id, user?.access_token]);
 
   return (
     <div>

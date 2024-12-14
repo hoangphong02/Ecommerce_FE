@@ -510,7 +510,7 @@ const OrderPage = () => {
                 flexDirection: "column",
               }}
             >
-              {order?.orderItems.map((order) => {
+              {order?.orderItems?.forEach((order) => {
                 if (order?.name) {
                   return (
                     <WrapperProductCart className="products">
