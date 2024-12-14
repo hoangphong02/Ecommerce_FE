@@ -1,5 +1,3 @@
-// import { Card } from 'antd'
-// import Meta from 'antd/es/card/Meta'
 import React from "react";
 import {
   StyleNameProduct,
@@ -14,18 +12,8 @@ import { StarFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router";
 
 const CardComponent = (props) => {
-  const {
-    countInStock,
-    description,
-    image,
-    name,
-    price,
-    rating,
-    type,
-    discount,
-    selled,
-    id,
-  } = props;
+  const { countInStock, image, name, price, rating, discount, selled, id } =
+    props;
   const navigate = useNavigate();
   const handleDetailsProduct = (id) => {
     navigate(`/product-detail/${id}`);
@@ -36,8 +24,6 @@ const CardComponent = (props) => {
       hoverable
       style={{ width: 230 }}
       bodyStyle={{ padding: "10px" }}
-      // cover={countInStock !==0? <img alt="example" src={image} /> : <div style={{height:"200px",width:"200px", display:"flex",justifyContent:"center", alignItems:"center"}}>Hết hàng</div> }
-      // cover={<img alt="example" src={image} />}
       cover={
         <div
           style={{

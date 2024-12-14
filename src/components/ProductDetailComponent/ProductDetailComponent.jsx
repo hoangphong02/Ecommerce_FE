@@ -1,7 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Col, Form, Image, Rate, Row, message } from "antd";
 import React, { useEffect, useState } from "react";
-// import imageProduct from '../../assets/images/test.webp'
-// import imageSmallProduct from '../../assets/images/imageSmall.webp'
 import {
   WrapperAddress,
   WrapperBtnAddCart,
@@ -147,12 +146,6 @@ const ProductDetailComponent = ({
       });
     }
   }, [isOpenModalUpdateInfo]);
-
-  // useEffect(() => {
-  //   if (changeAddress) {
-  //     setVoiceChangeAddress(changeAddress);
-  //   }
-  // }, [changeAddress]);
 
   useEffect(() => {
     if (voiceChangeAddress === true) {
@@ -311,7 +304,6 @@ const ProductDetailComponent = ({
 
   useEffect(() => {
     if (idProduct) {
-      //   setIsLoadingUpdate(true)
       fetchGetDetailsProduct(idProduct);
     }
   }, [idProduct]);
@@ -372,12 +364,7 @@ const ProductDetailComponent = ({
     const res = ProductService.addFollower(id, token, { ...rests });
     return res;
   });
-  const {
-    data: dataAddFollower,
-    isLoading: isLoadingUpdated,
-    isSuccess: isSuccessUpdated,
-    isError: isErrorUpdated,
-  } = mutationAddFollower;
+
   const onAddFollower = () => {
     mutationAddFollower.mutate({
       id: idProduct,
@@ -600,7 +587,6 @@ const ProductDetailComponent = ({
               onClick={onHandleFollower}
             ></WrapperBtnFollowProduct>
           </WrapperBtnBuyCart>
-          {/* <QRCodeComponent productId={idProduct}/> */}
         </Col>
       </Row>
       <ModalComponent
@@ -609,7 +595,6 @@ const ProductDetailComponent = ({
         onCancel={handleCancelUpdate}
         onOk={handleUpdateInfoUser}
       >
-        {/* <Loading isLoading={}> */}
         <Form
           form={form}
           name="basic"
@@ -622,7 +607,6 @@ const ProductDetailComponent = ({
           initialValues={{
             remember: true,
           }}
-          // onFinish={onUpdateUser}
           autoComplete="on"
         >
           <Form.Item
@@ -692,7 +676,6 @@ const ProductDetailComponent = ({
             />
           </Form.Item>
         </Form>
-        {/* </Loading> */}
       </ModalComponent>
     </>
   );

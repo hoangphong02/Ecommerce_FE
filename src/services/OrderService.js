@@ -1,4 +1,3 @@
-import axios from "axios";
 import { axiosJWT } from "./UserService";
 export const createOrder = async (data, access_token) => {
   const res = await axiosJWT.post(

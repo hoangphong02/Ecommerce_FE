@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
 import {
   AnimatedImage,
   WrapperButtonComponent,
@@ -24,20 +25,16 @@ import * as SliderService from "../../services/SliderService";
 import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import Loading from "../../components/Loading/Loading";
-import { useDebounce } from "../../hooks/useDebounce";
 import { useLocation, useNavigate } from "react-router";
 import { message } from "antd";
 import SliderCartComponent from "../../components/SliderCartComponent/SliderCartComponent";
 import moment from "moment";
-import "moment/locale/vi"; // Đặt ngôn ngữ hiển thị, ví dụ tiếng Việt
+import "moment/locale/vi";
 import { useMutationHook } from "../../hooks/useMutationHook";
 import * as ContactService from "../../services/ContactService";
 import ScrollAnimation from "react-animate-on-scroll";
 
 const HomePage = () => {
-  const searchProduct = useSelector((state) => state?.product?.search);
-  const searchDebounce = useDebounce(searchProduct, 100); //delay thời gian tìm kiếm 1s sau khi nhập kí tự
-  const refSearch = useRef();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -55,7 +52,6 @@ const HomePage = () => {
   const user = useSelector((state) => state.user);
   const location = useLocation();
   const today = moment();
-  const formattedToday = today.format("DD/MM");
   const startDateTimeTrungthu = moment("01/3", "DD/MM").startOf("day");
   const endDateTimeTrungthu = moment("30/9", "DD/MM").endOf("day");
 
@@ -71,8 +67,6 @@ const HomePage = () => {
   const startDateTimeTinhnhan = moment("01/02", "DD/MM").startOf("day");
   const endDateTimeTinhnhan = moment("28/02", "DD/MM").endOf("day");
 
-  const customToday = moment("04/02", "DD/MM");
-
   const getAllSlider = async () => {
     const res = await SliderService.getAllSlider();
     return res;
@@ -86,7 +80,7 @@ const HomePage = () => {
   const getDataSlider = () => {
     const arrdata = [];
     if (sliders?.data) {
-      sliders?.data.map((slider) => {
+      sliders?.data.forEach((slider) => {
         arrdata.push(slider?.image);
       });
     }
@@ -96,17 +90,6 @@ const HomePage = () => {
     getDataSlider();
   }, [sliders]);
 
-  const fetchAllProductSliderCart = async () => {
-    const res = await ProductService.getAllProduct("", 100);
-    return res.data;
-  };
-  const queryProductSliderCart = useQuery({
-    queryKey: ["productCart"],
-    queryFn: fetchAllProductSliderCart,
-  });
-
-  const { isLoading: isLoadingProducts, data: productCart } =
-    queryProductSliderCart;
   const fetchAllProductTypes = async () => {
     setLoading(true);
     const tetPromise = ProductService.getProductType("tết", 0, 100);
@@ -201,12 +184,7 @@ const HomePage = () => {
     return res;
   });
 
-  const {
-    data,
-    isLoading: isLoadingAdd,
-    isSuccess: isSuccsess,
-    isError: isError,
-  } = mutationAddContact;
+  const { data, isSuccess: isSuccsess } = mutationAddContact;
 
   const handleAddContact = () => {
     // eslint-disable-next-line no-unused-expressions
@@ -234,7 +212,7 @@ const HomePage = () => {
     } else if (isSuccsess && data?.status === "ERR") {
       message.error(data?.message);
     }
-  }, [isSuccsess, isError]);
+  }, [isSuccsess]);
 
   return (
     <Loading isLoading={loading}>
@@ -246,7 +224,7 @@ const HomePage = () => {
           <SliderComponent arrImg={dataSlider} />
 
           <div style={{ backgroundColor: "#821a20", width: "100%" }}>
-            <img src={headerTet} style={{ width: "100%" }} />
+            <img src={headerTet} style={{ width: "100%" }} alt="" />
 
             <div>
               <WrapperTitleProductTrend
@@ -268,6 +246,7 @@ const HomePage = () => {
                             height: "200px",
                             borderRadius: "50px",
                           }}
+                          alt=""
                         />
                         <WrapperTextProductTrending
                           className="nameProductTrending"
@@ -370,9 +349,9 @@ const HomePage = () => {
             <div
               style={{
                 backgroundColor: "#821a20",
-                backgroundImage: `url(${backgroundValentineRight}), url(${backgroundValentine})`, // Lặp lại hình ảnh hai lần
-                backgroundRepeat: "no-repeat, no-repeat", // Không lặp lại hình ảnh
-                backgroundPosition: "left top, right bottom", // Đặt vị trí của từng hình ảnh
+                backgroundImage: `url(${backgroundValentineRight}), url(${backgroundValentine})`,
+                backgroundRepeat: "no-repeat, no-repeat",
+                backgroundPosition: "left top, right bottom",
                 backgroundSize: "auto",
                 padding: "20px 0 40px 0",
               }}
@@ -403,7 +382,7 @@ const HomePage = () => {
                 backgroundColor: "#821a20",
                 width: "100%",
                 backgroundImage: `url(${backgroundTet})`,
-                backgroundRepeat: "no-repeat", // Tùy chọn để tránh lặp lại hình nền
+                backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 backgroundSize: "100%",
                 padding: "0 0 40px 0",
@@ -471,7 +450,7 @@ const HomePage = () => {
                 }}
               >
                 <AnimatedImage>
-                  <img src={ImageContact} />
+                  <img src={ImageContact} alt="" />
                 </AnimatedImage>
                 <div
                   style={{

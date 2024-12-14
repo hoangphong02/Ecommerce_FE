@@ -30,7 +30,7 @@ const CartSliderComponent = (props) => {
     queryKey: ["discounts"],
     queryFn: getAllDiscounts,
   });
-  const { isLoading: isLoadingDiscount, data: discounts } = queryDiscount;
+  const { data: discounts } = queryDiscount;
   return (
     <WrapperStyleCard
       hoverable

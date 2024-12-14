@@ -2,29 +2,20 @@ import { useLocation, useNavigate } from "react-router";
 import {
   WrapperDetailOrder,
   WrapperDetails,
-  WrapperInfo,
   WrapperInfoDetails,
-  WrapperInputNumber,
-  WrapperLeft,
   WrapperListMethodOrder,
   WrapperListProductOrder,
   WrapperProductsOrder,
-  WrapperRight,
 } from "./style";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import * as OrderService from "../../services/OrderService";
-import StepComponent from "../../components/StepComponent/StepComponent";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/Loading/Loading";
-import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import { useMemo } from "react";
 import { HomeFilled, PhoneFilled } from "@ant-design/icons";
 
 const MyOrderPage = () => {
-  //  const order = useSelector((state)=> state.order)
   const user = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  const location = useLocation();
   const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -159,6 +150,7 @@ const MyOrderPage = () => {
                           paddingLeft: "5px",
                         }}
                         src={item?.image}
+                        alt=""
                       ></img>
                       <span
                         style={{
@@ -222,10 +214,7 @@ const MyOrderPage = () => {
                 borderTop: "1px solid #ccc",
                 padding: "15px",
               }}
-            >
-              {/* <ButtonComponent textButton={"Hủy đơn hàng"}/>                */}
-              {/* <ButtonComponent textButton={"Xem chi tiết"}/> */}
-            </div>
+            ></div>
           </WrapperListProductOrder>
         </WrapperDetailOrder>
       </div>

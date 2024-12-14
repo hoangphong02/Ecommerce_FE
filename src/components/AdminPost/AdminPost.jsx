@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
 import { ButtonAddUser } from "./style";
 import {
@@ -93,17 +94,6 @@ const AdminPost = () => {
     queryKey: ["type-product"],
     queryFn: fetchAllTypeProduct,
   });
-  //  const mutationDeletedMany = useMutationHook(
-  //   (data) => {
-  //     const {
-  //       token,...ids
-  //     } = data
-  //     const res = ProductService.deleteManyProduct(
-  //       ids,
-  //       token)
-  //     return res
-  //   },
-  // )
 
   const getAllPost = async () => {
     const res = await PostService.getAllPost();
@@ -144,14 +134,6 @@ const AdminPost = () => {
     setIsOpenDrawer(true);
   };
 
-  // const handleDeleteManyProduct =(ids)=>{
-  //   mutationDeletedMany.mutate({ ids: ids, token: user?.access_token }, {
-  //     onSettled: () => {
-  //       queryProduct.refetch()
-  //     }
-  //   })
-  // }
-
   const { data, isLoading, isSuccess, isError } = mutation;
   const {
     data: dataUpdated,
@@ -184,15 +166,11 @@ const AdminPost = () => {
     );
   };
 
-  //Search filter antd https://ant.design/components/table#components-table-demo-custom-filter-panel
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+  const handleSearch = (confirm, dataIndex) => {
     confirm();
-    // setSearchText(selectedKeys[0]);
-    // setSearchedColumn(dataIndex);
   };
   const handleReset = (clearFilters, confirm) => {
     clearFilters();
-    // setSearchText('');
     confirm();
   };
 
@@ -271,13 +249,11 @@ const AdminPost = () => {
     {
       title: "Nội dung",
       dataIndex: "content",
-      // sorter: (a, b) => a.content.length - b.content.length,
       ...getColumnSearchProps("content"),
     },
     {
       title: "Loại bài đăng",
       dataIndex: "type",
-      // sorter: (a, b) => a.content.length - b.content.length,
       ...getColumnSearchProps("type"),
     },
     {
@@ -463,13 +439,6 @@ const AdminPost = () => {
     );
   };
 
-  // const handleChangeSelect = (value) => {
-  //     setStatePost({
-  //       ...statePost,
-  //       type: value
-  //     })
-  // }
-
   const handleDeleteImageUploadDetail = (url) => {
     let ArrImage = [];
     ArrImage = imageUploadDetail.filter((image) => image?.urlImage !== url);
@@ -498,13 +467,7 @@ const AdminPost = () => {
   return (
     <div>
       <AdminHeader textHeader={"Quản lý bài đăng"} />
-
-      {/* <div style={{width:"200px", height:"200px"}}>
-
-      <PieChartComponent data = {sliders?.data}/>
-      </div> */}
       <div style={{ marginTop: "10px" }}>
-        {/* <Button style={{ height: '150px', width: '150px', borderRadius: '6px', borderStyle: 'dashed' }} onClick={() => setIsModalOpen(true)}><PlusOutlined style={{ fontSize: '60px' }} /></Button> */}
         <ButtonAddUser onClick={() => setIsModalOpen(true)}>
           <PlusOutlined />
         </ButtonAddUser>
@@ -698,8 +661,6 @@ const AdminPost = () => {
             >
               <Select
                 name="type"
-                // defaultValue="lucy"
-                // style={{ width: 120 }}
                 value={statePostDetails.type}
                 onChange={handleChangeSelectDetail}
                 options={renderOptions(typeProduct?.data?.data)}

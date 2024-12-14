@@ -1,29 +1,23 @@
-import React, { useEffect, useRef, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable array-callback-return */
+import React, { useEffect, useState } from "react";
 import TypeProduct from "../../components/TypeProduct/TypeProduct";
 import {
   WrapperAll,
   WrapperBody,
-  WrapperButtonMore,
-  WrapperMic,
   WrapperPanigation,
   WrapperProducts,
   WrapperRight,
   WrapperSideBar,
   WrapperTypeProduct,
 } from "./style";
-import CardComponent from "../../components/CardComponent/CardComponent";
 import * as ProductService from "../../services/ProductService";
-import { useQuery } from "@tanstack/react-query";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Loading from "../../components/Loading/Loading";
 import { useDebounce } from "../../hooks/useDebounce";
-import { useLocation, useNavigate, useParams } from "react-router";
-import { Pagination, message } from "antd";
+import { useLocation, useParams } from "react-router";
 import { typeProductContant } from "../../contant";
-import { AudioMutedOutlined, AudioOutlined } from "@ant-design/icons";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
+
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import CartSliderComponent from "../../components/CartSliderComponent/CartSliderComponent";
 
@@ -31,17 +25,13 @@ import bgTypeGiangSinhHoaTuyet1 from "../../assets/images/bgHoaTuyet1.png";
 import bgTypeGiangSinhHoaTuyet2 from "../../assets/images/bgHoaTuyet2.png";
 import bgTypeGiangSinhHoaTuyet3 from "../../assets/images/bgHoaTuyet3.png";
 
-import bgTypeTetHoaMai2 from "../../assets/images/bgTypeTetHoaMai5.png";
 import bgTypeTetHoaMai3 from "../../assets/images/bgTypeTetHoaMai4.png";
 
 import bgTypeTrungthu1 from "../../assets/images/bgTypeTrungthu7.jpg";
-import bgTypeTrungthu5 from "../../assets/images/bgTypeTrungthu3.jpg";
-import bgTypeTrungthu3 from "../../assets/images/bgTypeTrungthu3.jpg";
 
 import bgTypeHalloween from "../../assets/images/bgTypeHalloween2.png";
 
 import bgTypeValentine from "../../assets/images/bgTypeValentine1.png";
-import { searchProduct } from "../../redux/slides/productSlide";
 
 const TypeProductPage = () => {
   const searchProduct1 = useSelector((state) => state?.product?.search);
@@ -54,7 +44,6 @@ const TypeProductPage = () => {
   const [filter, setFilter] = useState(false);
   const [value1, setValue1] = useState(0);
   const [value2, setValue2] = useState(3500000);
-  const navigate = useNavigate();
   const [arrImageBackgroundAmination, setArrImageBackgroundAmination] =
     useState([]);
   const [panigate, setPanigate] = useState({
@@ -62,13 +51,6 @@ const TypeProductPage = () => {
     limit: 6,
     total: 1,
   });
-
-  const dispatch = useDispatch();
-  // useEffect(() => {
-  //   if (stateNameProductByTextVoice !== "") {
-  //     dispatch(searchProduct(stateNameProductByTextVoice));
-  //   }
-  // }, [stateNameProductByTextVoice]);
 
   const fetchAllProductType = async (type, page, limit) => {
     setLoading(true);
@@ -103,13 +85,6 @@ const TypeProductPage = () => {
   const onChange = (current, pageSize) => {
     setPanigate({ ...panigate, page: current - 1 });
   };
-  const customName = (str) => {
-    const name = str
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      ?.replace(/ /g, "_");
-    return name;
-  };
 
   const handleOnChange = () => {
     let range1 = document.getElementsByClassName("range1")[0];
@@ -121,13 +96,6 @@ const TypeProductPage = () => {
   };
 
   const handleFilter = () => {
-    // const filter =[]
-    // productsAll.map((pro)=>{
-    //   if(pro.price>= value1 && pro.price <= value2){
-    //     filter.push(pro)
-    //   }
-    // })
-    // setProductsFilter(filter)
     setFilter(true);
   };
 
@@ -188,12 +156,13 @@ const TypeProductPage = () => {
                         <img
                           style={{ width: "20px", height: "20px" }}
                           src={type.image}
+                          alt=""
                         />
                         <TypeProduct name={type.type} key={type.type} />
                       </div>
                     )
                 )}
-                {typeProduct.map((type) => {
+                {typeProduct.forEach((type) => {
                   if (!typeProductContant.some((item) => item.type === type)) {
                     return (
                       <div
@@ -213,11 +182,6 @@ const TypeProductPage = () => {
                     );
                   }
                 })}
-                {/* {typeProduct.map((item)=>{
-                return (
-                    <TypeProduct name={item} key={item} param={type} />
-                )
-            })} */}
               </WrapperTypeProduct>
 
               <div
@@ -334,60 +298,6 @@ const TypeProductPage = () => {
                           />
                         );
                       })}
-
-                {/* {products
-                  ?.filter((pro) => {
-                    if (filter === false) {
-                      if (searchDebounce === "") {
-                        return pro;
-                      } else if (
-                        pro?.name
-                          ?.toLowerCase()
-                          ?.includes(searchDebounce?.toLowerCase())
-                      ) {
-                        return pro;
-                      }
-                    } else {
-                      if (
-                        searchDebounce === "" &&
-                        pro.price >= value1 &&
-                        pro.price <= value2
-                      ) {
-                        return pro;
-                      } else if (
-                        pro?.name
-                          ?.toLowerCase()
-                          ?.includes(searchDebounce?.toLowerCase()) &&
-                        pro.price >= value1 &&
-                        pro.price <= value2
-                      ) {
-                        return pro;
-                      }
-                    }
-                    // if(searchDebounce === '') {
-                    //     return pro
-                    // }else if(pro?.name?.toLowerCase()?.includes(searchDebounce?.toLowerCase())) {
-                    //    return pro
-                    // }
-                  })
-                  ?.map((product) => {
-                    return (
-                      // <CardComponent key={product._id} countInStock={product.countInStock} description={product.description} image ={product.image} name ={product.name} price={product.price} rating={product.rating} type= {product.type} discount ={product.discount} selled= {product.selled} id={product._id}/>
-                      <CartSliderComponent
-                        key={product._id}
-                        countInStock={product.countInStock}
-                        description={product.description}
-                        image={product.image}
-                        name={product.name}
-                        price={product.price}
-                        rating={product.rating}
-                        type={product.type}
-                        discount={product.discount}
-                        selled={product.selled}
-                        id={product._id}
-                      />
-                    );
-                  })} */}
               </WrapperProducts>
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <WrapperPanigation

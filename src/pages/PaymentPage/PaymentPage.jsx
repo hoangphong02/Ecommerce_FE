@@ -1,6 +1,5 @@
-import { DeleteOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
-import Icon from "@ant-design/icons/lib/components/Icon";
-import { Checkbox, Form, Radio, Space, message } from "antd";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Form, Radio, Space, message } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import imagePay from "../../assets/images/pay.png";
@@ -10,20 +9,13 @@ import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import {
   WrapperContent,
   WrapperInfo,
-  WrapperInputNumber,
   WrapperLeft,
   WrapperListDelivery,
   WrapperRight,
   WrapperSection,
 } from "./style";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  decreaseAmount,
-  increaseAmount,
-  orderSelected,
-  removeAllOrderProduct,
-  removeOrderProduct,
-} from "../../redux/slides/oderSlide";
+import { removeAllOrderProduct } from "../../redux/slides/oderSlide";
 import ModalComponent from "../../components/ModalComponent/ModalComponent";
 import Loading from "../../components/Loading/Loading";
 import InputComponent from "../../components/InputComponent/InputComponent";
@@ -40,8 +32,6 @@ const PaymentPage = () => {
   const order = useSelector((state) => state.order);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const arrPrice = [];
-  const [temporaryPrice, setTemporaryPrice] = useState(0);
   const [isOpenModalUpdateInfo, setIsOpenModalUpdateInfo] = useState(false);
   const [sdkReady, setSdkReady] = useState(false);
   const [payment, setPayment] = useState("Thanh toán khi nhận hàng");
@@ -68,7 +58,7 @@ const PaymentPage = () => {
     queryKey: ["discounts"],
     queryFn: getAllDiscounts,
   });
-  const { isLoading: isLoadingDiscount, data: discounts } = queryDiscount;
+  const { data: discounts } = queryDiscount;
 
   const handleOnchangeDetails = (e) => {
     setStateUserDetails({
@@ -161,14 +151,9 @@ const PaymentPage = () => {
     }
   };
 
-  const {
-    data: dataAdd,
-    isLoading: isLoading,
-    isSuccess: isSuccsess,
-    isError: isError,
-  } = mutationAddOrder;
+  const { data: dataAdd, isSuccess } = mutationAddOrder;
   useEffect(() => {
-    if (isSuccsess && dataAdd?.status === "OK") {
+    if (isSuccess && dataAdd?.status === "OK") {
       const orderArr = [];
       order?.orderItemsSelected?.forEach((element) => {
         orderArr.push(element.product);
@@ -183,22 +168,10 @@ const PaymentPage = () => {
           totalPriceMemo: priceMemoTotal?.toLocaleString(),
         },
       });
-    } else if (isSuccsess && dataAdd?.status === "ERR") {
+    } else if (isSuccess && dataAdd?.status === "ERR") {
       message.error(dataAdd?.message);
     }
-  }, [isSuccsess, isError]);
-
-  //     const handleAddOrder=()=>{
-  //       if(user?.access_token && order?.orderItemsSelected && user?.name && user?.address && user?.phone && user?.city && priceMemo && priceMemoDelivery && priceMemoTotal && user?.id){
-
-  //         // eslint-disable-next-line no-unused-expressions
-  //         mutationAddOrder.mutate({
-  //          token:user?.access_token, orderItems: order?.orderItemsSelected, fullName: user?.name, address: user?.address, phone: user?.phone, city: user?.city, paymentMethod: payment,itemPrice: priceMemo,
-  //  shippingPrice: priceMemoDelivery,totalPrice:priceMemoTotal, user:user?.id,
-
-  //         })
-  //       }
-  //     }
+  }, [isSuccess]);
 
   const handleAddOrder = () => {
     if (
@@ -211,7 +184,6 @@ const PaymentPage = () => {
       priceMemo &&
       user?.id
     ) {
-      // eslint-disable-next-line no-unused-expressions
       mutationAddOrder.mutate({
         token: user?.access_token,
         orderItems: order?.orderItemsSelected,
@@ -233,7 +205,6 @@ const PaymentPage = () => {
     setIsOpenModalUpdateInfo(true);
   };
   const onChangeRadioPayment = (e) => {
-    // setValue(e.target.value)
     setPayment(e.target.value);
   };
   useEffect(() => {
@@ -254,7 +225,6 @@ const PaymentPage = () => {
   }, [stateBuy]);
 
   const onChangeRadioDelevery = (e) => {
-    // setValue(e.target.value)
     setDelivery(e.target.value);
   };
 
@@ -298,7 +268,7 @@ const PaymentPage = () => {
   }, []);
 
   return (
-    <Loading isLoading={isLoading}>
+    <Loading>
       <div
         style={{
           width: "100%",
@@ -331,7 +301,6 @@ const PaymentPage = () => {
                         </span>{" "}
                         <span>Giao hàng tiết kiệm</span>
                       </Radio>
-                      {/*   <Radio value={"Go_JEK Giao hàng tiết kiệm"}><span style={{color:"coral", fontWeight:"500"}}>Go_JEK</span> <span>Giao hàng tiết kiệm</span></Radio>*/}
                     </Space>
                   </Radio.Group>
                 </WrapperListDelivery>
@@ -350,18 +319,26 @@ const PaymentPage = () => {
                   <Radio.Group onChange={onChangeRadioPayment} value={payment}>
                     <Space direction="vertical">
                       <Radio value={"Thanh toán khi nhận hàng"}>
-                        <img style={{ width: "20px" }} src={imagePay} />{" "}
+                        <img style={{ width: "20px" }} src={imagePay} alt="" />{" "}
                         <span>Thanh toán khi nhận hàng</span>
                       </Radio>
                       <Radio value={"Thanh toán bằng ví MoMo"}>
                         <span style={{ display: "flex" }}>
-                          <img style={{ width: "20px" }} src={imageMoMo} />{" "}
+                          <img
+                            style={{ width: "20px" }}
+                            src={imageMoMo}
+                            alt=""
+                          />{" "}
                           <span>Thanh toán bằng ví MoMo</span>
                         </span>
                       </Radio>
                       <Radio value={"Thanh toán bằng ví Paypal"}>
                         <span style={{ display: "flex" }}>
-                          <img style={{ width: "20px" }} src={imagePayment} />{" "}
+                          <img
+                            style={{ width: "20px" }}
+                            src={imagePayment}
+                            alt=""
+                          />{" "}
                           <span>Thanh toán bằng ví Paypal</span>
                         </span>
                       </Radio>
@@ -442,7 +419,6 @@ const PaymentPage = () => {
                 {payment === "Thanh toán bằng ví Paypal" && sdkReady ? (
                   <PayPalButton
                     amount={Math.round(priceMemoTotal / 30000)}
-                    // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
                     onSuccess={onSuccessPaypal}
                     onError={() => {
                       alert("Error");
@@ -472,7 +448,6 @@ const PaymentPage = () => {
           onCancel={handleCancelUpdate}
           onOk={handleUpdateInfoUser}
         >
-          {/* <Loading isLoading={}> */}
           <Form
             form={form}
             name="basic"
@@ -485,7 +460,6 @@ const PaymentPage = () => {
             initialValues={{
               remember: true,
             }}
-            // onFinish={onUpdateUser}
             autoComplete="on"
           >
             <Form.Item
@@ -555,7 +529,6 @@ const PaymentPage = () => {
               />
             </Form.Item>
           </Form>
-          {/* </Loading> */}
         </ModalComponent>
       </div>
     </Loading>

@@ -14,7 +14,6 @@ import MyOrderPage from "../pages/MyOrderPage/MyOrderPage";
 import DetailsOrderPage from "../pages/DetailsOrderPage/DetailsOrderPage";
 import TrendingProductPage from "../pages/TrendingProductPage/TrendingProductPage";
 import ContactPage from "../pages/ContactPage/ContactPage";
-import TestPage from "../pages/TestPage/TestPage";
 import ForgetPasswordPage from "../pages/ForgetPassword/ForgetPasswordPage";
 import CreateNewPassword from "../pages/CreateNewPassword/CreateNewPassword";
 import BlogPage from "../pages/BlogPage/BlogPage";
@@ -69,7 +68,7 @@ export const routes = [
     page: ContactPage,
     isShowHeader: true,
   },
-   {
+  {
     path: "/blog",
     page: BlogPage,
     isShowHeader: true,
@@ -113,10 +112,5 @@ export const routes = [
     path: "/profile-user",
     page: ProfilePage,
     isShowHeader: true,
-  },
-  {
-    path: "/testTrending",
-    page: TestPage,
-    isShowHeader: false,
   },
 ];

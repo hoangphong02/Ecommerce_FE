@@ -148,18 +148,15 @@ const AdminDashboard = () => {
     name: monthMap[item.name],
   }));
 
-  //Khách hàng tiềm năng
   const userOrderTotal = {};
   Array.isArray(orders?.data) &&
     orders?.data?.forEach((order) => {
       const isReceived = order?.isReceived === true;
       if (isReceived) {
         if (order?.user) {
-          // Nếu người dùng đã tồn tại trong userOrderTotal
           if (userOrderTotal[order.user]) {
             userOrderTotal[order.user].total += order.totalPrice;
           } else {
-            // Nếu người dùng chưa tồn tại trong userOrderTotal, tạo mới
             userOrderTotal[order.user] = {
               name: order.user,
               total: order.totalPrice,
@@ -184,7 +181,6 @@ const AdminDashboard = () => {
     }
     return item;
   });
-  /////
 
   const transformedDataCountInStock = products?.data?.reduce((acc, curr) => {
     const existingItem = acc.findIndex((item) => item.name === curr.type);
@@ -218,7 +214,6 @@ const AdminDashboard = () => {
       title: "Tên sản phẩm",
       dataIndex: "name",
       key: "name",
-      // render: (text) => <a>{text}</a>,
     },
     {
       title: "Đã bán",
@@ -299,7 +294,6 @@ const AdminDashboard = () => {
               <h2>{contacts?.data?.length ? contacts?.data?.length : 0}</h2>
             </div>
           </div>
-          {/* Biểu đồ thống kê doanh thu 12 tháng */}
           <div
             style={{
               padding: "30px 0",
@@ -388,7 +382,6 @@ const AdminDashboard = () => {
                     bottom: 0,
                   }}
                 >
-                  {/* <CartesianGrid strokeDasharray="3 3" /> */}
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
@@ -412,7 +405,6 @@ const AdminDashboard = () => {
                     bottom: 5,
                   }}
                 >
-                  {/* <CartesianGrid strokeDasharray="3 3" /> */}
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
@@ -429,7 +421,6 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          {/* Biểu đồ thống kê sản phẩm tồn kho */}
           <div
             style={{
               padding: "30px 0",
@@ -448,7 +439,6 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          {/* Bảng sản phẩm bán chạy bán chậm */}
           <div
             style={{
               padding: "30px 0",

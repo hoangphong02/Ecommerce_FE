@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
 import ProductDetailComponent from "../../components/ProductDetailComponent/ProductDetailComponent";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { useMutationHook } from "../../hooks/useMutationHook";
 import * as EvaluateService from "../../services/EvaluateService";
 import { useSelector } from "react-redux";
-import { Input, Rate, message } from "antd";
+import { Rate, message } from "antd";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import { useQuery } from "@tanstack/react-query";
 import { WrapperProductDetail } from "./style";
@@ -12,20 +13,16 @@ import { WrapperProductDetail } from "./style";
 const ProductDetailPage = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
-  const product = useSelector((state) => state?.product);
   const [addCart, setAddCart] = useState(false);
   const [buyNow, setBuynow] = useState(false);
-  const [valueRating, setValueRating] = useState(0);
   const [numberIncrease, setNumberIncrease] = useState(0);
   const [numberDecrease, setNumberDecrease] = useState(0);
   const [dataRating, setDataRating] = useState([]);
   const [ratingDetail, setRatingDetail] = useState(0);
 
   const { id } = useParams();
-  // const {state}= useLocation()
   const location = useLocation();
 
-  const [description, setDescription] = useState("");
   const addCartHeader = location.state?.addCartHeader || false;
   const buyNowHeader = location.state?.buyNowHeader || false;
   const numberIncreaseFromState = location.state?.numberIncrease || 0;
@@ -43,12 +40,7 @@ const ProductDetailPage = () => {
     return res;
   });
 
-  const {
-    data: dataAdd,
-    isLoading: isLoadingAdd,
-    isSuccess: isSuccsess,
-    isError: isError,
-  } = mutationAddEvaluate;
+  const { data: dataAdd, isSuccess } = mutationAddEvaluate;
 
   const fetchMyEvaluate = async () => {
     const res = await EvaluateService.getEvaluateByProductId(
@@ -62,18 +54,16 @@ const ProductDetailPage = () => {
     queryKey: ["evaluate"],
     queryFn: fetchMyEvaluate,
   });
-  const { isLoading, data } = queryEvaluate;
+  const { data } = queryEvaluate;
 
   useEffect(() => {
-    if (isSuccsess && dataAdd?.status === "OK") {
+    if (isSuccess && dataAdd?.status === "OK") {
       message.success("Bình luận thành công");
       queryEvaluate.refetch();
-      setDescription("");
-      setValueRating(0);
-    } else if (isSuccsess && dataAdd?.status === "ERR") {
+    } else if (isSuccess && dataAdd?.status === "ERR") {
       message.error(dataAdd?.message);
     }
-  }, [isSuccsess, isError]);
+  }, [isSuccess]);
 
   function formatDateTime(dateTimeString, locale = "vi-VN") {
     const formattedDate = new Intl.DateTimeFormat(locale, {
@@ -95,7 +85,6 @@ const ProductDetailPage = () => {
 
   const {
     data: dataDeleted,
-    isLoading: isLoadingDeleted,
     isSuccess: isSuccessDelected,
     isError: isErrorDeleted,
   } = mutationDeleted;
@@ -113,13 +102,11 @@ const ProductDetailPage = () => {
   useEffect(() => {
     if (isSuccessDelected && dataDeleted?.status === "OK") {
       message.success("Xóa bình luận thành công");
-      // queryEvaluate.refetch()
     } else if (isErrorDeleted) {
       message.error("Xóa không thành công");
     }
   }, [isSuccessDelected]);
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     setAddCart(addCartHeader);
   }, [addCartHeader]);
@@ -187,14 +174,7 @@ const ProductDetailPage = () => {
       >
         Bình luận và đánh giá
       </div>
-      {/* <div style={{margin:"30px 0", display:"flex",gap:"10px",alignItems:"center"}}>
-      <img src={user?.avatar} style={{width:"40px", height:"40px", borderRadius:"50%", objectFit:"cover"}}/>
-      <div style={{width:"100%",lineHeight:"2"}}>
-      <Rate onChange={setValueRating} value={valueRating} />
-      <Input placeholder="Add evaluate" value={description} onChange={onChange} />
-      </div>
-      <ButtonComponent textButton={"evaluate"} onClick={()=>handleAddevaluate()}/>
-      </div> */}
+
       <div>
         {data?.map((evaluate) => {
           return (

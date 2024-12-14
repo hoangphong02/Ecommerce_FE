@@ -1,17 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+/* eslint-disable array-callback-return */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
 import moment from "moment";
-import "moment/locale/vi"; // Đặt ngôn ngữ hiển thị, ví dụ tiếng Việt
-import { typeProductContant } from "../../contant";
+import "moment/locale/vi";
 import * as ProductService from "../../services/ProductService";
 import * as SliderService from "../../services/SliderService";
-import CardComponent from "../../components/CardComponent/CardComponent";
 import {
   WrapperProducts,
   Wrappertext,
   WrappertextCongratulation,
 } from "./style";
 import SliderComponent from "../../components/SliderComponent/SliderComponent";
-import { Pagination, message } from "antd";
+import { Pagination } from "antd";
 import CartSliderComponent from "../../components/CartSliderComponent/CartSliderComponent";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useSelector } from "react-redux";
@@ -21,13 +21,10 @@ import headerTet from "../../assets/images/factory_bg_1.png";
 const TrendingProductPage = () => {
   const searchProduct = useSelector((state) => state?.product?.search);
   const searchDebounce = useDebounce(searchProduct, 1000); //delay thời gian tìm kiếm 1s sau khi nhập kí tự
-  const refSearch = useRef();
   const [typeProduct, setTypeProduct] = useState("");
   const [products, setProducts] = useState([]);
-  const [imageSlider, setImageSlider] = useState([]);
   const [slider, setSlider] = useState([]);
   const [textCongratulation, setTextCongratulation] = useState("");
-  const user = useSelector((state) => state?.user);
   const [panigate, setPanigate] = useState({
     page: 0,
     limit: 6,
@@ -43,20 +40,7 @@ const TrendingProductPage = () => {
   });
   const { data: sliders } = querySlider;
 
-  // const getSlider = (typeProduct)=>{
-  //     const arrImage = []
-  //     if(sliders?.data){
-  //         sliders?.data?.map((slider)=>{
-  //             if(slider.type === typeProduct){
-  //                 arrImage.push(slider.image)
-  //             }
-  //         })
-  //     }
-  //     setSlider(arrImage)
-  // }
-
   const today = moment();
-  const formattedToday = today.format("DD/MM");
   const startDateTimeTrungthu = moment("01/3", "DD/MM").startOf("day");
   const endDateTimeTrungthu = moment("30/9", "DD/MM").endOf("day");
 
@@ -71,8 +55,6 @@ const TrendingProductPage = () => {
 
   const startDateTimeTinhnhan = moment("01/02", "DD/MM").startOf("day");
   const endDateTimeTinhnhan = moment("28/02", "DD/MM").endOf("day");
-
-  const customToday = moment("04/02", "DD/MM");
 
   useEffect(() => {
     if (
@@ -99,30 +81,21 @@ const TrendingProductPage = () => {
   }, [today]);
 
   const fetchAllProductType = async (type, page, limit) => {
-    // setLoading(true);
     const res = await ProductService.getProductType(type, page, limit);
     if (res?.status === "OK") {
-      // setLoading(false);
       setProducts(res?.data);
       setPanigate({ ...panigate, total: res?.totalPage });
     } else {
-      // setLoading(false)
     }
   };
   useEffect(() => {
     fetchAllProductType(typeProduct, panigate.page, panigate.limit);
   }, [typeProduct, panigate.page, panigate.limit]);
 
-  // const getImageSlider = ()=>{
-  //      const foundImage = typeProductContant.find((type) => type.type === typeProduct);
-  //      if(foundImage){
-  //         setImageSlider(foundImage?.imageSlider)
-  //      }
-  // }
   const getSlider = (typeProduct) => {
     const arrImage = [];
     if (sliders?.data) {
-      sliders?.data?.map((slider) => {
+      sliders?.data?.forEach((slider) => {
         if (slider.type === typeProduct) {
           arrImage.push(slider.image);
         }
@@ -167,8 +140,6 @@ const TrendingProductPage = () => {
     setPanigate({ ...panigate, page: current - 1 });
   };
 
-  //test mic
-
   return (
     <div>
       <div
@@ -180,7 +151,7 @@ const TrendingProductPage = () => {
       >
         <SliderComponent arrImg={slider} />
         <div>
-          <img src={headerTet} style={{ width: "100%" }} />
+          <img src={headerTet} style={{ width: "100%" }} alt="" />
         </div>
         <WrappertextCongratulation>
           <Wrappertext>{textCongratulation}</Wrappertext>
@@ -201,7 +172,6 @@ const TrendingProductPage = () => {
             })
             .map((product) => {
               return (
-                // <CardComponent key={product._id} countInStock={product.countInStock} description={product.description} image ={product.image} name ={product.name} price={product.price} rating={product.rating} type= {product.type} discount ={product.discount} selled= {product.selled} id={product._id}/>
                 <CartSliderComponent
                   key={product._id}
                   countInStock={product.countInStock}

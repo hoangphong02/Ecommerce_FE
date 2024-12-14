@@ -12,10 +12,9 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import * as UserService from "../../services/UserService";
 import { useMutationHook } from "../../hooks/useMutationHook";
-import Loading from "../../components/Loading/Loading";
 import * as message from "../../components/Message/Message";
 import { updateUser } from "../../redux/slides/userSlide";
-import { Button, Modal, Upload } from "antd";
+import { Button, Modal } from "antd";
 import { EditOutlined, UploadOutlined } from "@ant-design/icons";
 import { getBase64 } from "../../utils";
 import icon_username from "../../assets/images/icon-username.png";
@@ -37,7 +36,7 @@ function ProfilePage() {
     UserService.updateUser(id, rests, access_token);
   });
   const dispatch = useDispatch();
-  const { data, isSuccess, isLoading, isError } = mutation;
+  const { isSuccess, isError } = mutation;
   useEffect(() => {
     setName(user?.name);
     setEmail(user?.email);
@@ -47,8 +46,6 @@ function ProfilePage() {
   }, [user]);
 
   const handleGetDetailsUser = async (id, token) => {
-    // const res = await UserService.getDetailUser(id,token)
-    // dispatch(updateUser({...res?.data,access_token: token}))
     const storage = localStorage.getItem("refresh_token");
     const refreshToken = JSON.parse(storage);
     const res = await UserService.getDetailUser(id, token);
@@ -198,7 +195,6 @@ function ProfilePage() {
                     alt="avatar"
                   />
                 )}
-                {/* <InputForm style={{width:'300px'}} id="avatar" value={avatar} onChange={handleOnchangeAvatar} /> */}
               </WrapperInput>
             </WrapperContentProfile>
           </Modal>
@@ -211,6 +207,7 @@ function ProfilePage() {
                 <img
                   src={icon_username}
                   style={{ width: "30px", height: "30px" }}
+                  alt=""
                 />
               </label>
               <input
@@ -231,6 +228,7 @@ function ProfilePage() {
                 <img
                   src={icon_email}
                   style={{ width: "30px", height: "30px" }}
+                  alt=""
                 />
               </label>
               <input
@@ -251,6 +249,7 @@ function ProfilePage() {
                 <img
                   src={icon_phone}
                   style={{ width: "30px", height: "30px" }}
+                  alt=""
                 />
               </label>
               <input
@@ -271,6 +270,7 @@ function ProfilePage() {
                 <img
                   src={icon_address}
                   style={{ width: "30px", height: "30px" }}
+                  alt=""
                 />
               </label>
               <input

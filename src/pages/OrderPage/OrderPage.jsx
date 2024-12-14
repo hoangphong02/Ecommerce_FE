@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { Checkbox, Form, message } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
@@ -25,8 +26,6 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import * as DiscountService from "../../services/DiscountService";
 import ModalComponent from "../../components/ModalComponent/ModalComponent";
-import Loading from "../../components/Loading/Loading";
-import InputComponent from "../../components/InputComponent/InputComponent";
 import { useMutationHook } from "../../hooks/useMutationHook";
 import * as UserService from "../../services/UserService";
 import { updateUser } from "../../redux/slides/userSlide";
@@ -137,7 +136,7 @@ const OrderPage = () => {
     queryKey: ["discounts"],
     queryFn: getAllDiscounts,
   });
-  const { isLoading: isLoadingDiscount, data: discounts } = queryDiscount;
+  const { data: discounts } = queryDiscount;
 
   useEffect(() => {
     if (idProductCheck !== "") {
@@ -212,7 +211,7 @@ const OrderPage = () => {
       if (listChecked.includes(numUnCheckList)) {
         listChecked
           ?.filter((item) => item !== numUnCheckList)
-          .map((pro) => {
+          .forEach((pro) => {
             arrListCheckNew.push(pro);
           });
       }
@@ -243,7 +242,7 @@ const OrderPage = () => {
   useEffect(() => {
     if (isCheckAll) {
       let arrItem = [];
-      order?.orderItems?.map((item) => {
+      order?.orderItems?.forEach((item) => {
         arrItem.push(item?.product);
       });
       setListChecked(arrItem);
@@ -311,24 +310,6 @@ const OrderPage = () => {
     }
   }, [voiceValueAddress]);
 
-  // order?.orderItems.forEach((item)=>{
-  //     arrPrice.push({
-  //         price: item.price * item.amount,
-
-  //     })
-  // })
-  // const totalPrice = ()=>{
-  //     let total = 0;
-  //     arrPrice.forEach((item)=>{
-  //         total += item.price
-  //     })
-  //    return total
-
-  // }
-  // useEffect(()=>{
-  //     setTemporaryPrice(totalPrice())
-  // },[arrPrice])
-
   const priceMemo = useMemo(() => {
     const result = order?.orderItemsSelected?.reduce((total, cur) => {
       return total + cur.price * cur.amount;
@@ -377,7 +358,6 @@ const OrderPage = () => {
     const res = UserService.updateUser(id, { ...rests }, token);
     return res;
   });
-  const { data, isLoading } = mutationUpdate;
 
   const handleUpdateInfoUser = () => {
     const { name, address, phone, city } = stateUserDetails;
@@ -553,6 +533,7 @@ const OrderPage = () => {
                             paddingLeft: "5px",
                           }}
                           src={order?.image}
+                          alt=""
                         ></img>
                         <span
                           style={{
@@ -707,7 +688,6 @@ const OrderPage = () => {
         onCancel={handleCancelUpdate}
         onOk={handleUpdateInfoUser}
       >
-        {/* <Loading isLoading={}> */}
         <Form
           form={form}
           name="basic"
@@ -720,7 +700,6 @@ const OrderPage = () => {
           initialValues={{
             remember: true,
           }}
-          // onFinish={onUpdateUser}
           autoComplete="on"
         >
           <Form.Item
@@ -790,7 +769,6 @@ const OrderPage = () => {
             />
           </Form.Item>
         </Form>
-        {/* </Loading> */}
       </ModalComponent>
     </div>
   );

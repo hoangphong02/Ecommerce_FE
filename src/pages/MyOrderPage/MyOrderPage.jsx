@@ -4,11 +4,9 @@ import {
   WrapperOrderItem,
   WrapperProductsOrder,
 } from "./style";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import * as OrderService from "../../services/OrderService";
-import StepComponent from "../../components/StepComponent/StepComponent";
 import { useQuery } from "@tanstack/react-query";
-import Loading from "../../components/Loading/Loading";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import { useMutationHook } from "../../hooks/useMutationHook";
 import { useEffect, useState } from "react";
@@ -16,19 +14,14 @@ import { Modal, Rate, message } from "antd";
 import * as EvaluateService from "../../services/EvaluateService";
 
 const MyOrderPage = () => {
-  //  const order = useSelector((state)=> state.order)
   const user = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  const location = useLocation();
   const { state } = useLocation();
   const navigate = useNavigate();
   const [modal2Open, setModal2Open] = useState(false);
   const [valueRating, setValueRating] = useState(0);
   const [description, setDescription] = useState("");
-  const [idDetailsOrder, setIdDetailsOrder] = useState("");
   const [idProduct, setIdProduct] = useState([]);
   const [idOrder, setIdOrder] = useState("");
-  const [isEvaluate, setIsEvaluate] = useState(false);
   const [evaluatedProducts, setEvaluatedProducts] = useState([]);
 
   const fetchMyOrder = async () => {
@@ -37,7 +30,7 @@ const MyOrderPage = () => {
   };
 
   const queryOrder = useQuery({ queryKey: ["orders"], queryFn: fetchMyOrder });
-  const { isLoading, data } = queryOrder;
+  const { data } = queryOrder;
 
   const fetchMyDetailsOrder = async (id, token) => {
     const arrIdProduct = [];
@@ -111,15 +104,9 @@ const MyOrderPage = () => {
     return res;
   });
 
-  const {
-    data: dataAdd,
-    isLoading: isLoadingAdd,
-    isSuccess: isSuccsess,
-    isError: isError,
-  } = mutationAddEvaluate;
+  const { data: dataAdd } = mutationAddEvaluate;
   const handleAddEvaluate = (id) => {
     if (user?.access_token) {
-      // eslint-disable-next-line no-unused-expressions
       mutationAddEvaluate.mutate({
         token: user?.access_token,
         name: user?.name,
@@ -131,7 +118,6 @@ const MyOrderPage = () => {
       });
     }
     setEvaluatedProducts([...evaluatedProducts, id]);
-    // setModal2Open(false)
     onUpdateOrder(idOrder);
   };
   useEffect(() => {
@@ -148,31 +134,15 @@ const MyOrderPage = () => {
   }, [dataAdd]);
 
   const handleOnOK = () => {
-    // if(user?.access_token  ) {
-    //     // eslint-disable-next-line no-unused-expressions
-    //     mutationAddEvaluate.mutate(
-    //       { token: user?.access_token,
-    //         name:user?.name,
-    //         avatar:user?.avatar,
-    //         description:description,
-    //         rating:valueRating,
-    //         user: user?.id,
-    //         product: id
-    //       }
-    //     )
-    //   }
     setModal2Open(false);
-    // onUpdateOrder(idOrder)
   };
 
   const handleEvaluate = (id) => {
     setModal2Open(true);
-    setIdDetailsOrder(id);
     fetchMyDetailsOrder(id, user?.access_token);
   };
 
   const {
-    isLoading: isLoadingCancel,
     isSuccess: isSuccessCancel,
     isError: isErrorCancel,
     data: dataCancel,
@@ -189,7 +159,6 @@ const MyOrderPage = () => {
   }, [isErrorCancel, isSuccessCancel]);
 
   return (
-    //  <Loading isLoading={isLoading} >
     <div style={{ width: "100%", background: "rgb(239, 239, 239)" }}>
       <WrapperListOrder>
         {data?.length > 0 ? (
@@ -320,7 +289,6 @@ const MyOrderPage = () => {
                     const isEvaluated = evaluatedProducts.includes(
                       product.product
                     );
-                    // Nếu sản phẩm đã được đánh giá, không render nó
                     if (isEvaluated) {
                       return null;
                     }
@@ -336,6 +304,7 @@ const MyOrderPage = () => {
                               src={user?.avatar}
                               width="70"
                               class="rounded-circle mt-2"
+                              alt=""
                             />
                           </div>
                           <div class="col-10">
@@ -401,8 +370,6 @@ const MyOrderPage = () => {
         )}
       </WrapperListOrder>
     </div>
-
-    //  </Loading>
   );
 };
 

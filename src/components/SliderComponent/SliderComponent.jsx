@@ -1,6 +1,4 @@
-import Slider from "react-slick";
 import React from "react";
-import { Image } from "antd";
 import { WrapperImage, WrapperSliderStyle } from "./style";
 
 const SliderComponent = ({ arrImg }) => {

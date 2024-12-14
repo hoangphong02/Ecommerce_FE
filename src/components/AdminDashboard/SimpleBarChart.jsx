@@ -2,7 +2,6 @@ import React from "react";
 import {
   Bar,
   BarChart,
-  CartesianGrid,
   Legend,
   Rectangle,
   ResponsiveContainer,
@@ -26,7 +25,6 @@ const SimpleBarChart = (props) => {
           bottom: 5,
         }}
       >
-        {/* <CartesianGrid strokeDasharray="3 3" /> */}
         <XAxis dataKey="name" />
         <YAxis />
         <Tooltip />

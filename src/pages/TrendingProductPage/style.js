@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 
 export const WrapperProducts = styled.div`
   display: flex;

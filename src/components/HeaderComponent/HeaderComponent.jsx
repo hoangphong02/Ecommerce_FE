@@ -1,4 +1,6 @@
-import { Badge, Col, Dropdown, Menu, Popover, Space, message } from "antd";
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import { Badge, Col, Dropdown, Popover, Space, message } from "antd";
 import {
   WrapperHeader,
   WrapperHeaderAccount,
@@ -20,12 +22,10 @@ import {
   AudioOutlined,
   AudioMutedOutlined,
   SearchOutlined,
-  DownOutlined,
   MenuOutlined,
-  MailOutlined,
 } from "@ant-design/icons";
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import * as UserService from "../../services/UserService";
 import { resetUser } from "../../redux/slides/userSlide";
@@ -45,15 +45,12 @@ const HeaderComPonent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [userAvatar, setUserAvatar] = useState("");
-  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.user);
   const order = useSelector((state) => state.order);
   const [typeProduct, setTypeProduct] = useState([]);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { id } = useParams();
   const [productOfType, setProductOfType] = useState([]);
-  const [addCartHeader, setAddCartHeader] = useState(false);
   const { state } = useLocation();
   const location = useLocation();
   const openMic = location.state?.openMic || false;
@@ -72,7 +69,7 @@ const HeaderComPonent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     queryFn: fetchAllProduct,
   });
 
-  const { isLoading: isLoadingProducts, data: products } = queryProduct;
+  const { data: products } = queryProduct;
 
   const fetchAllProductType = async (type, page, limit) => {
     setLoading(true);
@@ -80,7 +77,6 @@ const HeaderComPonent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     if (res?.status === "OK") {
       setLoading(false);
       setProductOfType(res?.data);
-      // setPanigate({...panigate,total: res?.totalPage})
     } else {
       setLoading(false);
     }
@@ -143,25 +139,20 @@ const HeaderComPonent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
   );
 
   const onSearch = (e) => {
-    setSearch(e.target.value);
     dispatch(searchProduct(e.target.value));
   };
 
   useEffect(() => {
-    // Lắng nghe sự kiện scroll
     const handleScroll = () => {
-      // Kiểm tra vị trí scroll và cập nhật trạng thái
       setIsScrolled(window.scrollY > 50);
     };
 
-    // Đăng ký sự kiện scroll
     window.addEventListener("scroll", handleScroll);
 
-    // Hủy đăng ký sự kiện khi component unmount
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []); // useEffect chỉ chạy một lần sau khi component được render
+  }, []);
 
   const getArrProductByText = async (str) => {
     const text = str.toLowerCase();
@@ -173,7 +164,7 @@ const HeaderComPonent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
             product.name.toLowerCase() === text ||
             product.name.toLowerCase().includes(text)
         )
-        .map((item) => {
+        .forEach((item) => {
           arr.push(item);
         });
       return arr?.length ? arr : [];
@@ -549,7 +540,6 @@ const HeaderComPonent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
         resetTranscript();
       }, 1500);
       return () => clearTimeout(setTimeNavi);
-      resetTranscript();
     }
     if (decreaseCount) {
       let number = text.split("xuống")[1].trim();
@@ -569,7 +559,6 @@ const HeaderComPonent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
         resetTranscript();
       }, 1500);
       return () => clearTimeout(setTimeNavi);
-      resetTranscript();
     }
     if (news) {
       handleRead(`Xem tin tức`);
@@ -737,8 +726,7 @@ const HeaderComPonent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
       resetTranscript();
     }, 1500);
     return () => clearTimeout(timeoutId);
-    resetTranscript();
-  }, [transcript, addCartHeader]);
+  }, [transcript]);
 
   const items = [
     {
@@ -1276,8 +1264,6 @@ const HeaderComPonent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
                 <ButtonInputSearch
                   placeholder="input search text"
                   size="large"
-                  // textButton ="Tìm kiếm"
-                  // bordered={false}
                   backgroundColorInput="#fff"
                   borderRadius="0px"
                   border="none"

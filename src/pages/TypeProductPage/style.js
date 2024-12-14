@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
-import bgTypeTetHoaMai2 from "../../assets/images/bgTypeTetHoaMai4.png";
-import bgTypeTetHoaMai3 from "../../assets/images/bgTypeTetHoaMai3.png";
 
 import { Pagination } from "antd";
 

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import * as PostService from "../../services/PostService";
@@ -61,12 +62,7 @@ const BlogPage = () => {
     const res = PostService.getPostLiked(token, { ...rests });
     return res;
   });
-  const {
-    data: dataGet,
-    isLoading: isLoadingGet,
-    isSuccess: isSuccessGet,
-    isError: isErrorGet,
-  } = mutationGetPostLiked;
+  const { data: dataGet } = mutationGetPostLiked;
 
   const getPostLiked = () => {
     mutationGetPostLiked.mutate({
@@ -90,23 +86,13 @@ const BlogPage = () => {
     const res = PostService.deleteLike(id, token);
     return res;
   });
-  const {
-    data: dataDeleteLike,
-    isLoading: isLoadingDelete,
-    isSuccess: isSuccessDelete,
-    isError: isErrorDelete,
-  } = mutationDeletedLike;
+  const { data: dataDeleteLike } = mutationDeletedLike;
   const mutationAddLike = useMutationHook((data) => {
     const { id, token, ...rests } = data;
     const res = PostService.addLike(id, token, { ...rests });
     return res;
   });
-  const {
-    data: dataAddLike,
-    isLoading: isLoadingUpdated,
-    isSuccess: isSuccessUpdated,
-    isError: isErrorUpdated,
-  } = mutationAddLike;
+  const { data: dataAddLike } = mutationAddLike;
 
   const onAddLike = (idPost) => {
     mutationAddLike.mutate({
@@ -173,7 +159,6 @@ const BlogPage = () => {
     }
   }, [dataAddLike, dataDeleteLike]);
 
-  //Comment
   const fetchMyComments = async () => {
     if (idPostByOpenModal) {
       const res = await PostService.getCommentByIdPost(
@@ -188,7 +173,7 @@ const BlogPage = () => {
     queryKey: ["comment"],
     queryFn: fetchMyComments,
   });
-  const { isLoading, data: commentQuery } = queryComment;
+  const { data: commentQuery } = queryComment;
 
   const fetchCommentByIdPost = async (id) => {
     const res = await PostService.getCommentByIdPost(id, user?.access_token);
@@ -211,12 +196,7 @@ const BlogPage = () => {
     const res = PostService.createComment({ ...rests }, token);
     return res;
   });
-  const {
-    data: dataAdd,
-    isLoading: isLoadingAdd,
-    isSuccess: isSuccsess,
-    isError: isError,
-  } = mutationCreateComment;
+  const { data: dataAdd, isSuccess: isSuccsess } = mutationCreateComment;
 
   const onChangeContentComment = (e) => {
     setContent(e.target.value);
@@ -248,7 +228,7 @@ const BlogPage = () => {
         message.error("Bình luận thất bại");
       }
     }
-  }, [dataAdd, isSuccsess, isError]);
+  }, [dataAdd, isSuccsess]);
   useEffect(() => {
     if (idPostByOpenModal) {
       fetchMyComments();
@@ -267,7 +247,6 @@ const BlogPage = () => {
   });
   const {
     data: dataDeletedComment,
-    isLoading: isLoadingDeleted,
     isSuccess: isSuccessDelectedComment,
     isError: isErrorDeletedComment,
   } = mutationDeletedComment;
@@ -299,7 +278,7 @@ const BlogPage = () => {
     queryKey: ["allComment"],
     queryFn: getAllComment,
   });
-  const { isLoading: isLoadingOrder, data: allComment } = queryGetAllComments;
+  const { data: allComment } = queryGetAllComments;
 
   useEffect(() => {
     const postCounts = {};
@@ -336,7 +315,7 @@ const BlogPage = () => {
       <div style={{ background: "#fff" }}>
         <div style={{ width: "100%" }}>
           <div style={{ textAlign: "center" }}>
-            <img src={logo} style={{ height: "200px" }} />
+            <img src={logo} style={{ height: "200px" }} alt="" />
           </div>
           <div
             style={{ display: "flex", flexDirection: "column", gap: "10px" }}
@@ -563,7 +542,6 @@ const BlogPage = () => {
                     <span>{custumDay(comment?.createdAt)}</span>
                     <div>{comment?.content} </div>
                     <div style={{ display: "flex", float: "right" }}>
-                      {/* {user?.isAdmin ? <ButtonComponent textButton={"Xóa"} onClick={()=>handleDeleteEvaluate(evaluate?._id)}/>:("")} */}
                       <ButtonComponent
                         textButton={"Xóa"}
                         onClick={() => handleDeleteComment(comment?._id)}
@@ -611,7 +589,6 @@ const BlogPage = () => {
               value={content}
             />
             <div style={{ display: "flex", float: "right" }}>
-              {/* {user?.isAdmin ? <ButtonComponent textButton={"Xóa"} onClick={()=>handleDeleteEvaluate(evaluate?._id)}/>:("")} */}
               <ButtonComponent
                 disabled={content !== "" ? false : true}
                 textButton={<SendOutlined />}

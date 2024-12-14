@@ -11,7 +11,6 @@ const TypeProduct = ({ name, param, style }) => {
         ?.replace(/ /g, "_")}`,
       { state: type }
     );
-    // window.location.href=`/product/${type}`
   };
   function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);

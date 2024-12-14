@@ -23,11 +23,6 @@ export const getAllContact = async () => {
 export const getDetailContact = async (id) => {
   const res = await axiosJWT.get(
     `${process.env.REACT_APP_API_URL}/contact/get-contact-details/${id}`
-    // {
-    //   headers: {
-    //     token: `Bearer ${access_token}`,
-    //   },
-    // }
   );
   return res.data;
 };

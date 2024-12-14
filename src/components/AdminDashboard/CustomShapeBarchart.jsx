@@ -1,5 +1,5 @@
 import React from "react";
-import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, Cell, XAxis, YAxis } from "recharts";
 
 const CustomShapeBarchart = (props) => {
   const { data } = props;
@@ -34,7 +34,6 @@ const CustomShapeBarchart = (props) => {
         bottom: 5,
       }}
     >
-      {/* <CartesianGrid strokeDasharray="3 3" /> */}
       <XAxis dataKey="name" />
       <YAxis />
       <Bar

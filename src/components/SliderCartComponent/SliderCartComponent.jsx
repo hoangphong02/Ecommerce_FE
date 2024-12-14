@@ -1,6 +1,6 @@
-import Slider from "react-slick";
-import React, { useEffect, useRef, useState } from "react";
-import { Image } from "antd";
+/* eslint-disable array-callback-return */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
 import { WrapperSliderStyle } from "./style";
 import CartSliderComponent from "../CartSliderComponent/CartSliderComponent";
 import { useDebounce } from "../../hooks/useDebounce";
@@ -10,7 +10,6 @@ const SliderCartComponent = ({ products }) => {
   const searchProduct = useSelector((state) => state?.product?.search);
   const searchDebounce = useDebounce(searchProduct, 1000); //delay thời gian tìm kiếm 1s sau khi nhập kí tự
   const [productSearch, setProductSearch] = useState([]);
-  const refSearch = useRef();
   const infinited = () => {
     const product = [];
     products.filter((pro) => {

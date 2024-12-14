@@ -1,6 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Fragment, useEffect, useState } from "react";
-// import { useQuery } from "@tanstack/react-query";
-// import axios from "axios";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { routes } from "./routes";
 import DefaultComponent from "./components/DefaultComponent/DefaultComponent";
@@ -34,7 +33,6 @@ function App() {
     return { decoded, storageData };
   };
 
-  // Add a request interceptor
   UserService.axiosJWT.interceptors.request.use(
     async (config) => {
       const currentTime = new Date();
@@ -54,7 +52,6 @@ function App() {
       return config;
     },
     (err) => {
-      // Do something with request error
       return Promise.reject(err);
     }
   );
@@ -72,15 +69,6 @@ function App() {
     );
   };
 
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   const { storageData, decoded } = handleDecoded();
-  //   if (decoded?.id) {
-  //     handleGetDetailsUser(decoded?.id, storageData);
-  //   }
-  //   setIsLoading(false);
-  // }, []);
-
   return (
     <div>
       <Loading isLoading={isLoading}>
@@ -94,7 +82,6 @@ function App() {
                 <Route
                   key={route.path}
                   path={ischeckAuth && route.path}
-                  // path={route.path}
                   element={
                     <Layout>
                       <Page />

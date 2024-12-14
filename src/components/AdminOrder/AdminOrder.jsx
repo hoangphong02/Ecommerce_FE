@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
 import {
   CheckCircleOutlined,
@@ -26,7 +27,6 @@ import { useReactToPrint } from "react-to-print";
 import moment from "moment";
 
 const AdminOrder = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowSelected, setRowSelected] = useState("");
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
@@ -35,7 +35,6 @@ const AdminOrder = () => {
   const [confirm, setConfirm] = useState(false);
   const [paid, setPaid] = useState(false);
   const [delivery, setDelivery] = useState(false);
-  const [received, setReceived] = useState(false);
   const [dataOrderToPrint, setDataOrderToPrint] = useState([]);
   const user = useSelector((state) => state?.user);
   const [isPrinting, setIsPrinting] = useState(false);
@@ -52,7 +51,7 @@ const AdminOrder = () => {
           ?.filter(
             (item) => item?.isConfirm === true && item?.isDelivered === false
           )
-          .map((order) => {
+          .forEach((order) => {
             arrOrderToPrint.push(order);
           });
         setDataOrderToPrint(arrOrderToPrint);
@@ -66,7 +65,7 @@ const AdminOrder = () => {
       setIsPrinting(true);
       if (orders?.data?.length && rowSelected) {
         const dataOrder = [];
-        orders?.data?.map((item) => {
+        orders?.data?.forEach((item) => {
           if (item?._id === rowSelected) {
             dataOrder.push(item);
           }
@@ -162,16 +161,13 @@ const AdminOrder = () => {
       setConfirm(res?.data?.isConfirm);
       setPaid(res?.data?.isPaid);
       setDelivery(res?.data?.isDelivered);
-      setReceived(res?.data?.isReceived);
     }
     setIsLoadingUpdate(false);
   };
 
   useEffect(() => {
-    if (!isModalOpen) {
-      form.setFieldsValue(stateOrdersDetails);
-    }
-  }, [form, stateOrdersDetails, isModalOpen]);
+    form.setFieldsValue(stateOrdersDetails);
+  }, [form, stateOrdersDetails]);
 
   useEffect(() => {
     if (rowSelected && isOpenDrawer) {
@@ -182,14 +178,6 @@ const AdminOrder = () => {
 
   const handleDetailsOrder = () => {
     setIsOpenDrawer(true);
-  };
-
-  const handleDeleteManyUser = (ids) => {
-    // mutationDeletedMany.mutate({ ids: ids, token: user?.access_token }, {
-    //   onSettled: () => {
-    //     queryUser.refetch()
-    //   }
-    // })
   };
   const {
     data: dataUpdated,
@@ -203,7 +191,6 @@ const AdminOrder = () => {
     isSuccess: isSuccessDelected,
     isError: isErrorDeleted,
   } = mutationDeleted;
-  //  const { data: dataDeletedMany, isLoading: isLoadingDeletedMany, isSuccess: isSuccessDelectedMany, isError: isErrorDeletedMany } = mutationDeletedMany
 
   const queryOrder = useQuery({ queryKey: ["orders"], queryFn: getAllOrder });
   const { isLoading: isLoadingOrder, data: orders } = queryOrder;
@@ -215,7 +202,7 @@ const AdminOrder = () => {
         ?.filter(
           (item) => item?.isConfirm === true && item?.isDelivered === false
         )
-        .map((order) => {
+        .forEach((order) => {
           arrOrderToPrint.push(order);
         });
       setDataOrderToPrint(arrOrderToPrint);
@@ -243,14 +230,11 @@ const AdminOrder = () => {
     );
   };
 
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+  const handleSearch = (confirm) => {
     confirm();
-    // setSearchText(selectedKeys[0]);
-    // setSearchedColumn(dataIndex);
   };
   const handleReset = (clearFilters, confirm) => {
     clearFilters();
-    // setSearchText('');
     confirm();
   };
 
@@ -320,12 +304,11 @@ const AdminOrder = () => {
     },
   });
 
-  //columns and data truyền vào tablecomponent
   const columns = [
     {
       title: "Tên khách hàng",
       dataIndex: "userName",
-      render: (text) => <a>{text}</a>,
+      render: (text) => <span>{text}</span>,
       sorter: (a, b) => a.userName.length - b.userName.length,
       ...getColumnSearchProps("userName"),
     },
@@ -392,17 +375,9 @@ const AdminOrder = () => {
         return record.isDelivered.type.render.name === "CloseCircleOutlined";
       },
     },
-    // {
-    //   title: "Payment method",
-    //   dataIndex: "paymentMethod",
-    //   sorter: (a, b) => a.paymentMethod.length - b.paymentMethod.length,
-    //   ...getColumnSearchProps("paymentMethod"),
-    // },
     {
       title: "Giá",
       dataIndex: "totalPrice",
-      // sorter: (a, b) => a.totalPrice.length - b.totalPrice.length,
-      // ...getColumnSearchProps("totalPrice"),
     },
     {
       title: "Hành động",
@@ -466,15 +441,6 @@ const AdminOrder = () => {
     }
   }, [isSuccessUpdated]);
 
-  // useEffect(() => {
-  //   if (isSuccessDelectedMany && dataDeletedMany?.status === 'OK') {
-  //     message.success()
-  //     handleCancelDelete()
-  //   } else if (isErrorDeletedMany) {
-  //     message.error()
-  //   }
-  // }, [isSuccessDelectedMany])
-
   const handleCancelDelete = () => {
     setIsModalOpenDelete(false);
   };
@@ -483,24 +449,6 @@ const AdminOrder = () => {
     setIsModalOpenPrint(false);
   };
 
-  const handleOnchangeDetails = (e) => {
-    if (e.target.name === "isReceived") {
-      if (e.target.value === "true") {
-        setStateOrdersDetails({
-          ...stateOrdersDetails,
-          isReceived: e.target.value,
-          isConfirm: true,
-          isDelivered: true,
-          isPaid: true,
-        });
-      }
-    } else {
-      setStateOrdersDetails({
-        ...stateOrdersDetails,
-        [e.target.name]: e.target.value,
-      });
-    }
-  };
   const handleOnchangeIsConfirmDetails = (e) => {
     if (stateOrdersDetails?.isReceived === true) {
       setStateOrdersDetails({
@@ -614,9 +562,7 @@ const AdminOrder = () => {
           </p>
         </div>
       </div>
-      {/* <div style={{ marginTop: '10px' }}>
-        <ButtonAddUser onClick={() => setIsModalOpen(true)}><PlusOutlined /></ButtonAddUser>
-      </div> */}
+
       {isPrinting && (
         <div className="d-none">
           <ReactToPrintComponent data={dataOrderToPrint} ref={printRef} />
@@ -629,7 +575,6 @@ const AdminOrder = () => {
       </ButtonPrint>
       <div style={{ marginTop: "20px" }}>
         <TableComponent
-          handleDeleteMany={handleDeleteManyUser}
           columns={columns}
           isLoading={isLoadingOrder}
           data={dataTable}
@@ -644,7 +589,6 @@ const AdminOrder = () => {
       </div>
       <DrawerComponent
         title="Chi tiết đơn hàng"
-        // isOpen={isOpenDrawer}
         onClose={() => setIsOpenDrawer(false)}
         width="90%"
       >
@@ -674,7 +618,6 @@ const AdminOrder = () => {
                 },
               ]}
             >
-              {/* <InputComponent value = {stateOrdersDetails._id} onChange ={handleOnchangeDetails} name="_id"/> */}
               <span>{stateOrdersDetails._id}</span>
             </Form.Item>
             <Form.Item
@@ -687,7 +630,6 @@ const AdminOrder = () => {
                 },
               ]}
             >
-              {/* <InputComponent value = {stateOrdersDetails.name} onChange ={handleOnchangeDetails} name="name"/> */}
               <span>{stateOrdersDetails.name}</span>
             </Form.Item>
 
@@ -701,7 +643,6 @@ const AdminOrder = () => {
                 },
               ]}
             >
-              {/* <InputComponent value = {stateOrdersDetails.address} onChange ={handleOnchangeDetails} name="address"/> */}
               <span>{stateOrdersDetails.address}</span>
             </Form.Item>
 
@@ -715,7 +656,6 @@ const AdminOrder = () => {
                 },
               ]}
             >
-              {/* <InputComponent value = {stateOrdersDetails.phone} onChange ={handleOnchangeDetails} name="phone"/> */}
               <span>{stateOrdersDetails.phone}</span>
             </Form.Item>
 
@@ -758,7 +698,6 @@ const AdminOrder = () => {
                 },
               ]}
             >
-              {/* <InputComponent value = {(stateOrdersDetails.totalPrice).toLocaleString()} onChange ={handleOnchangeDetails} name="totalPrice"/> */}
               <span>{stateOrdersDetails.totalPrice.toLocaleString()} VND</span>
             </Form.Item>
 
@@ -779,12 +718,6 @@ const AdminOrder = () => {
                 <Radio value={false}>False</Radio>
                 <Radio value={true}>True</Radio>
               </Radio.Group>
-
-              {/* <InputComponent
-                value={stateOrdersDetails.isConfirm}
-                onChange={handleOnchangeDetails}
-                name="isConfirm"
-              /> */}
             </Form.Item>
 
             <Form.Item
@@ -804,11 +737,6 @@ const AdminOrder = () => {
                 <Radio value={false}>False</Radio>
                 <Radio value={true}>True</Radio>
               </Radio.Group>
-              {/* <InputComponent
-                value={stateOrdersDetails.isPaid}
-                onChange={handleOnchangeDetails}
-                name="isPaid"
-              /> */}
             </Form.Item>
 
             <Form.Item
@@ -859,7 +787,6 @@ const AdminOrder = () => {
                 },
               ]}
             >
-              {/* <InputComponent value = {stateOrdersDetails.paymentMethod} onChange ={handleOnchangeDetails} name="paymentMethod"/> */}
               <span>{stateOrdersDetails.paymentMethod}</span>
             </Form.Item>
             <Form.Item
@@ -872,7 +799,6 @@ const AdminOrder = () => {
                 },
               ]}
             >
-              {/* <InputComponent value = {stateOrdersDetails.createdAt} onChange ={handleOnchangeDetails} name="createdAt"/> */}
               <span>{stateOrdersDetails?.createdAt}</span>
             </Form.Item>
 
@@ -942,7 +868,6 @@ const AdminOrder = () => {
                 },
               ]}
             >
-              {/* <InputComponent value = {stateOrdersDetails._id} onChange ={handleOnchangeDetails} name="_id"/> */}
               <span>{stateOrdersDetails._id}</span>
             </Form.Item>
             <Form.Item
@@ -954,17 +879,14 @@ const AdminOrder = () => {
                 },
               ]}
             >
-              {/* <InputComponent value = {stateOrdersDetails.name} onChange ={handleOnchangeDetails} name="name"/> */}
               <span>{stateOrdersDetails.name}</span>
             </Form.Item>
 
             <Form.Item label="Địa chỉ" name="address">
-              {/* <InputComponent value = {stateOrdersDetails.address} onChange ={handleOnchangeDetails} name="address"/> */}
               <span>{stateOrdersDetails.address}</span>
             </Form.Item>
 
             <Form.Item label="Điện thoại" name="phone">
-              {/* <InputComponent value = {stateOrdersDetails.phone} onChange ={handleOnchangeDetails} name="phone"/> */}
               <span>{stateOrdersDetails.phone}</span>
             </Form.Item>
 
@@ -998,7 +920,6 @@ const AdminOrder = () => {
             </Form.Item>
 
             <Form.Item label="Giá" name="totalPrice">
-              {/* <InputComponent value = {(stateOrdersDetails.totalPrice).toLocaleString()} onChange ={handleOnchangeDetails} name="totalPrice"/> */}
               <span>{stateOrdersDetails.totalPrice.toLocaleString()} VND</span>
             </Form.Item>
 
@@ -1007,42 +928,16 @@ const AdminOrder = () => {
                 checked={stateOrdersDetails?.isConfirm}
                 onChange={handleOnchangeIsConfirmDetails}
               />
-
-              {/* <InputComponent
-                value={stateOrdersDetails.isConfirm}
-                onChange={handleOnchangeDetails}
-                name="isConfirm"
-              /> */}
             </Form.Item>
 
             <Form.Item label="Thanh toán" name="isPaid">
-              {/* <Radio.Group
-                onChange={handleOnchangeIsPaidDetails}
-                value={stateOrdersDetails?.isPaid}
-              >
-                <Radio value={false}>False</Radio>
-                <Radio value={true}>True</Radio>
-              </Radio.Group> */}
-
               <Switch
                 checked={stateOrdersDetails?.isPaid}
                 onChange={handleOnchangeIsPaidDetails}
               />
-              {/* <InputComponent
-                value={stateOrdersDetails.isPaid}
-                onChange={handleOnchangeDetails}
-                name="isPaid"
-              /> */}
             </Form.Item>
 
             <Form.Item label="Vận chuyển" name="isDelivered">
-              {/* <Radio.Group
-                onChange={handleOnchangeIsDeliveryDetails}
-                value={stateOrdersDetails?.isDelivered}
-              >
-                <Radio value={false}>False</Radio>
-                <Radio value={true}>True</Radio>
-              </Radio.Group> */}
               <Switch
                 checked={stateOrdersDetails?.isDelivered}
                 onChange={handleOnchangeIsDeliveryDetails}
@@ -1065,7 +960,6 @@ const AdminOrder = () => {
                 },
               ]}
             >
-              {/* <InputComponent value = {stateOrdersDetails.paymentMethod} onChange ={handleOnchangeDetails} name="paymentMethod"/> */}
               <span>{stateOrdersDetails.paymentMethod}</span>
             </Form.Item>
             <Form.Item
@@ -1077,7 +971,6 @@ const AdminOrder = () => {
                 },
               ]}
             >
-              {/* <InputComponent value = {stateOrdersDetails.createdAt} onChange ={handleOnchangeDetails} name="createdAt"/> */}
               <span>
                 {moment(stateOrdersDetails?.createdAt).format(
                   "hh:mm DD/MM/YYYY"

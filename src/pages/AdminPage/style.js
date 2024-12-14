@@ -1,5 +1,4 @@
 import styled, { css } from "styled-components";
-import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 
 const wideScreenStyles = css`
   @media screen and (max-width: 340px) {

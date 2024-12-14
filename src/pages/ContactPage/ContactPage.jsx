@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { WrapperButtonMore, WrapperContact, WrapperForm } from "./style";
 import { useMutationHook } from "../../hooks/useMutationHook";
@@ -34,15 +35,9 @@ const ContactPage = () => {
     return res;
   });
 
-  const {
-    data,
-    isLoading: isLoadingAdd,
-    isSuccess: isSuccsess,
-    isError: isError,
-  } = mutationAddContact;
+  const { data, isSuccess } = mutationAddContact;
 
   const handleAddContact = () => {
-    // eslint-disable-next-line no-unused-expressions
     if (!user?.id) {
       navigate("/sign-in", { state: location?.pathname });
     } else {
@@ -58,16 +53,16 @@ const ContactPage = () => {
   };
 
   useEffect(() => {
-    if (isSuccsess && data?.status === "OK") {
+    if (isSuccess && data?.status === "OK") {
       message.success("Gửi thông tin liên hệ thành công");
       setName("");
       setEmail("");
       setPhone("");
       setMessageInput("");
-    } else if (isSuccsess && data?.status === "ERR") {
+    } else if (isSuccess && data?.status === "ERR") {
       message.error(data?.message);
     }
-  }, [isSuccsess, isError]);
+  }, [isSuccess]);
 
   return (
     <WrapperContact className="container d-flex justify-content-center align-items-center">

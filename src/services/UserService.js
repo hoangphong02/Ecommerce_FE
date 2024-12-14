@@ -28,16 +28,6 @@ export const getDetailUser = async (id, access_token) => {
   return res.data;
 };
 
-// export const refreshToken = async () => {
-//   const res = await axios.post(
-//     `${process.env.REACT_APP_API_URL}/user/refresh-token`,
-//     {
-//       withCredentials: true, //Tự động lấy cookie truyền xuông backend
-//     }
-//   );
-//   return res.data;
-// };
-
 export const refreshToken = async (refreshToken) => {
   const res = await axios.post(
     `${process.env.REACT_APP_API_URL}/user/refresh-token`,
